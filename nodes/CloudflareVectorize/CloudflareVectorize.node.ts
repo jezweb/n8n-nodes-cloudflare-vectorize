@@ -1,4 +1,4 @@
-import { IExecuteFunctions, ILoadOptionsFunctions, INodeListSearchItems, INodeListSearchResult } from 'n8n-workflow';
+import { IExecuteFunctions } from 'n8n-workflow';
 import {
 	INodeType,
 	INodeTypeDescription,
@@ -6,7 +6,6 @@ import {
 	INodeExecutionData,
 	NodeOperationError,
 	NodeConnectionType,
-	INodePropertyOptions,
 } from 'n8n-workflow';
 
 import { CloudflareVectorizeUtils } from '../../utils/CloudflareVectorizeUtils';
@@ -15,9 +14,7 @@ import {
 	VectorizeResource,
 	VectorizeDistanceMetric,
 	VectorizeMetadataType,
-	VectorizeVector,
-	VectorizeConnectionConfig,
-	VectorizeNodeParameters
+	VectorizeConnectionConfig
 } from '../../types/CloudflareVectorizeTypes';
 
 export class CloudflareVectorize implements INodeType {
@@ -566,16 +563,16 @@ export class CloudflareVectorize implements INodeType {
 
 				switch (resource) {
 					case 'index':
-						result = await this.executeIndexOperation(config, operation, i);
+						result = await executeIndexOperation.call(this, config, operation, i);
 						break;
 					case 'vector':
-						result = await this.executeVectorOperation(config, operation, i);
+						result = await executeVectorOperation.call(this, config, operation, i);
 						break;
 					case 'metadata':
-						result = await this.executeMetadataOperation(config, operation, i);
+						result = await executeMetadataOperation.call(this, config, operation, i);
 						break;
 					case 'utility':
-						result = await this.executeUtilityOperation(config, operation, i);
+						result = await executeUtilityOperation.call(this, config, operation, i);
 						break;
 					default:
 						throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, { itemIndex: i });
@@ -591,7 +588,7 @@ export class CloudflareVectorize implements INodeType {
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: this.getInputData(i)[0].json,
-						error: error.message,
+						error: error instanceof Error ? error.message : String(error),
 					});
 					continue;
 				}
@@ -601,8 +598,10 @@ export class CloudflareVectorize implements INodeType {
 
 		return [this.helpers.returnJsonArray(returnData)];
 	}
+}
 
-	private async executeIndexOperation(
+async function executeIndexOperation(
+		this: IExecuteFunctions,
 		config: VectorizeConnectionConfig,
 		operation: VectorizeOperation,
 		itemIndex: number
@@ -656,7 +655,8 @@ export class CloudflareVectorize implements INodeType {
 		}
 	}
 
-	private async executeVectorOperation(
+async function executeVectorOperation(
+		this: IExecuteFunctions,
 		config: VectorizeConnectionConfig,
 		operation: VectorizeOperation,
 		itemIndex: number
@@ -804,7 +804,8 @@ export class CloudflareVectorize implements INodeType {
 		}
 	}
 
-	private async executeMetadataOperation(
+async function executeMetadataOperation(
+		this: IExecuteFunctions,
 		config: VectorizeConnectionConfig,
 		operation: VectorizeOperation,
 		itemIndex: number
@@ -857,7 +858,8 @@ export class CloudflareVectorize implements INodeType {
 		}
 	}
 
-	private async executeUtilityOperation(
+async function executeUtilityOperation(
+		this: IExecuteFunctions,
 		config: VectorizeConnectionConfig,
 		operation: VectorizeOperation,
 		itemIndex: number
@@ -906,4 +908,3 @@ export class CloudflareVectorize implements INodeType {
 				throw new NodeOperationError(this.getNode(), `Unknown utility operation: ${operation}`, { itemIndex });
 		}
 	}
-}

@@ -1,12 +1,10 @@
 import { IExecuteFunctions, IDataObject, NodeOperationError, IHttpRequestMethods } from 'n8n-workflow';
 import { 
 	VectorizeConnectionConfig,
-	VectorizeApiResponse,
 	VectorizeApiError,
 	VectorizeOperation,
 	VectorizeResource,
 	VectorizeErrorContext,
-	VectorizeOperationError,
 	VectorizeIndex,
 	VectorizeIndexInfo,
 	VectorizeVector,
@@ -57,8 +55,7 @@ export class CloudflareVectorizeUtils {
 			const response = await context.helpers.httpRequestWithAuthentication.call(
 				context,
 				'cloudflareVectorizeApi',
-				httpOptions,
-				{ itemIndex }
+				httpOptions
 			);
 
 			// Handle Cloudflare API response format
@@ -73,7 +70,7 @@ export class CloudflareVectorizeUtils {
 			}
 
 			return response.result || response;
-		} catch (error) {
+		} catch (error: any) {
 			if (error instanceof NodeOperationError) {
 				throw error;
 			}

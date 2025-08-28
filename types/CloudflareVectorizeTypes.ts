@@ -108,21 +108,21 @@ export interface VectorizeApiError {
 }
 
 // Operation-specific request types
-export interface VectorizeCreateIndexRequest {
+export interface VectorizeCreateIndexRequest extends IDataObject {
 	name: string;
 	description?: string;
 	config: VectorizeIndexConfig;
 }
 
-export interface VectorizeInsertRequest {
+export interface VectorizeInsertRequest extends IDataObject {
 	vectors: VectorizeVector[];
 }
 
-export interface VectorizeUpsertRequest {
+export interface VectorizeUpsertRequest extends IDataObject {
 	vectors: VectorizeVector[];
 }
 
-export interface VectorizeQueryRequest {
+export interface VectorizeQueryRequest extends IDataObject {
 	vector: number[] | Float32Array | Float64Array;
 	topK?: number;
 	returnValues?: boolean;
@@ -131,7 +131,7 @@ export interface VectorizeQueryRequest {
 	namespace?: string;
 }
 
-export interface VectorizeQueryByIdRequest {
+export interface VectorizeQueryByIdRequest extends IDataObject {
 	id: string;
 	topK?: number;
 	returnValues?: boolean;
@@ -140,24 +140,24 @@ export interface VectorizeQueryByIdRequest {
 	namespace?: string;
 }
 
-export interface VectorizeGetByIdsRequest {
+export interface VectorizeGetByIdsRequest extends IDataObject {
 	ids: string[];
 }
 
-export interface VectorizeDeleteByIdsRequest {
+export interface VectorizeDeleteByIdsRequest extends IDataObject {
 	ids: string[];
 }
 
-export interface VectorizeCreateMetadataIndexRequest {
+export interface VectorizeCreateMetadataIndexRequest extends IDataObject {
 	propertyName: string;
 	type: VectorizeMetadataType;
 }
 
-export interface VectorizeDeleteMetadataIndexRequest {
+export interface VectorizeDeleteMetadataIndexRequest extends IDataObject {
 	propertyName: string;
 }
 
-export interface VectorizeListVectorsRequest {
+export interface VectorizeListVectorsRequest extends IDataObject {
 	cursor?: string;
 	limit?: number;
 }
