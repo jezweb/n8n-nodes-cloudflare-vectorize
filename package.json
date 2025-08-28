@@ -33,9 +33,9 @@
     "build": "npx rimraf dist && tsc && gulp build:icons",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+    "lint": "eslint \"**/*.{js,ts}\" --ignore-path .gitignore",
+    "lintfix": "eslint \"**/*.{js,ts}\" --ignore-path .gitignore --fix",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"
@@ -50,11 +50,13 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "~8.32.0",
     "@typescript-eslint/parser": "~8.32.0",
     "eslint": "^8.57.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.3",
     "gulp": "^5.0.0",
     "prettier": "^3.5.3",
+    "rimraf": "^5.0.5",
     "typescript": "^5.8.2"
   },
   "peerDependencies": {
